@@ -87,10 +87,10 @@ int main(int argc, char** args)
     std::ifstream colour_file( "colours.txt" );
     while (getline(colour_file, line))
     {
-        colours.push_back({line});
+        colours.push_back({Trim(line)});
     }
     
-    cout << "Loaded " << colours.size() << " colours." << endl;
+    cerr << "Loaded " << colours.size() << " colours." << endl;
     
     map< Bucket, int > distributions;
     string header;
@@ -106,15 +106,15 @@ int main(int argc, char** args)
         
         auto ri = find(h.begin(), h.end(), "race");
         auto rd = distance(h.begin(), ri);
-        cout << "race on column " << rd << endl;
+        cerr << "race on column " << rd << endl;
 
         auto pi = find(h.begin(), h.end(), "pheomelanin");
         auto pd = distance(h.begin(), pi);
-        cout << "pheomelanin on column " << pd << endl;
+        cerr << "pheomelanin on column " << pd << endl;
 
         auto li = find(h.begin(), h.end(), "lipochrome");
         auto ld = distance(h.begin(), li);
-        cout << "lipochrome on column " << ld << endl;
+        cerr << "lipochrome on column " << ld << endl;
 
         while (getline(npc_file, line))
         {
@@ -130,12 +130,12 @@ int main(int argc, char** args)
         }
     }
     
-    cout << "Loaded " << rows << " NPCs." << endl;
-    cout << "Found " << gnomes << " gnomes." << endl;
-    cout << "With " << distributions.size() << " unique hormonal signatures." << endl;
+    cerr << "Loaded " << rows << " NPCs." << endl;
+    cerr << "Found " << gnomes << " gnomes." << endl;
+    cerr << "With " << distributions.size() << " unique hormonal signatures." << endl;
     
     int target = gnomes/colours.size();
-    cout << "Target " << target << " gnomes per colour." << endl;
+    cerr << "Target " << target << " gnomes per colour." << endl;
     
     for (const auto& kvp : distributions)
     {
@@ -159,15 +159,18 @@ int main(int argc, char** args)
     }
     
     vector< string > pad_with;
-    
+
+    cerr << "Results" << endl;
+    cerr << "colour, bins, pop" << endl;
+
     map< Bucket, string > results;
     for (int index=0;index!=colours.size();++index)
     {
         for (auto b : colours[index].buckets)
             results[b] = colours[index].name;
         
-        cout << colours[index].name << "\t" 
-             << colours[index].buckets.size() << "\t" 
+        cerr << colours[index].name << ", " 
+             << colours[index].buckets.size() << ", " 
              << colours[index].total << endl;
 
         if (colours[index].total < target)
