@@ -182,7 +182,7 @@ int main(int argc, char** args)
     for (int l=0;l<=46;l+=bucket_size)
     {
         if (l>0) cout << "," << endl;
-        cout << "[" << endl;
+        cout << "\t[" << endl;
         for (int p=0;p<=46;p+=bucket_size)
         {
             if (p>0) cout << "," << endl;
@@ -190,7 +190,7 @@ int main(int argc, char** args)
             string cname = results[Bucket(l,p)];
             if (cname.empty()) cname = pad_with[(cr++)%pad_with.size()];
             
-            cout << "[" << '"' << cname << '"' << "]";
+            cout << "\t\t[" << '"' << cname << '"' << "]";
         }
         cout << endl << "]";
     }
