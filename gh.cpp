@@ -218,8 +218,8 @@ int main(int argc, char** args)
             
             cout << tab << tab << "[" << '"' << cname << '"' << "]";
         }
-        cout << endl << "]";
+        cout << endl << tab << "]";
     }
-    cout << "]" << endl;    
+    cout << endl << "]" << endl;    
     
 }
