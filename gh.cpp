@@ -142,26 +142,44 @@ int main(int argc, char** args)
     cerr << "Found " << gnomes << " gnomes." << endl;
     cerr << "With " << distributions.size() << " unique hormonal signatures." << endl;
     
-    int target = gnomes/colours.size();
+    int target = ceil((float)gnomes/colours.size());
     cerr << "Target " << target << " gnomes per colour." << endl;
     
-    for (const auto& kvp : distributions)
+    vector< pair< Bucket, int > > buckets( distributions.begin(), distributions.end() );
+    sort( buckets.begin(), buckets.end(), [](auto a, auto b){return a.second > b.second;} );
+    
+    for (const auto& kvp : buckets)
     {
         int best_score=0, best_index=0;
-        for (int  index=0;index!=colours.size();++index)
+        for (int index=0; index!=colours.size(); ++index)
         {
             // proximity to target now (0 == perfect)
             int a = abs(colours[index].total - target);
             // proximity to target if combined 
             int b = abs(colours[index].total + kvp.second - target);
+
+            // square over-error
+            if (colours[index].total + kvp.second > target)
+                b=b*b;
+            
             // was big now small = good change 
             int score = a-b;
             if (score>best_score)
             {
-                score = best_score;
+                best_score = score;
                 best_index = index;
             }
+            else if (score==best_score)
+            {
+                // tiebreak equal improvement on current furthest to target
+                if (colours[index].total < colours[best_index].total)
+                {
+                    best_score = score;
+                    best_index = index;
+                }
+            }
         }
+        
         colours[best_index].buckets.push_back(kvp.first);
         colours[best_index].total += kvp.second;
     }
