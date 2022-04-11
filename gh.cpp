@@ -76,6 +76,14 @@ struct Colour
     int total = 0;
 };
 
+const int bucket_size = 2;
+const string tab = "    ";
+
+Bucket GetBucket( int l, int p )
+{
+    return Bucket( p/bucket_size, l/bucket_size );
+}
+
 int main(int argc, char** args)
 {
     //cout << argc << endl;
@@ -97,7 +105,7 @@ int main(int argc, char** args)
     int rows=0;
     int gnomes=0;
     
-    const int bucket_size = 2;
+
     
     std::ifstream npc_file( "npc.csv" );
     if (getline(npc_file, header))
@@ -123,9 +131,9 @@ int main(int argc, char** args)
             if (r[rd]=="1")
             {
                 gnomes++;
-                int l = atoi( r[ld].c_str() ) /bucket_size;
-                int p = atoi( r[pd].c_str() ) /bucket_size;
-                distributions[Bucket(l,p)]++;
+                int l = atoi( r[ld].c_str() );
+                int p = atoi( r[pd].c_str() );
+                distributions[GetBucket(l,p)]++;
             }
         }
     }
@@ -182,15 +190,15 @@ int main(int argc, char** args)
     for (int l=0;l<=46;l+=bucket_size)
     {
         if (l>0) cout << "," << endl;
-        cout << "\t[" << endl;
+        cout << tab << "[" << endl;
         for (int p=0;p<=46;p+=bucket_size)
         {
             if (p>0) cout << "," << endl;
             
-            string cname = results[Bucket(l,p)];
+            string cname = results[GetBucket(l,p)];
             if (cname.empty()) cname = pad_with[(cr++)%pad_with.size()];
             
-            cout << "\t\t[" << '"' << cname << '"' << "]";
+            cout << tab << tab << "[" << '"' << cname << '"' << "]";
         }
         cout << endl << "]";
     }
