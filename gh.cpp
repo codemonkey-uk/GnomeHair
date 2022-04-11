@@ -76,7 +76,7 @@ struct Colour
     int total = 0;
 };
 
-const int bucket_size = 2;
+const int bucket_size = 3;
 const string tab = "    ";
 
 Bucket GetBucket( int l, int p )
@@ -150,7 +150,7 @@ int main(int argc, char** args)
     
     for (const auto& kvp : buckets)
     {
-        int best_score=0, best_index=0;
+        int best_score=-INT_MAX, best_index=0;
         for (int index=0; index!=colours.size(); ++index)
         {
             // proximity to target now (0 == perfect)
